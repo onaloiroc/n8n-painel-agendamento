@@ -1,0 +1,2530 @@
+{
+  "updatedAt": "2026-10-28T15:29:07.961Z",
+  "createdAt": "2026-03-31T20:15:44.953Z",
+  "name": "Painel de Agendamento",
+  "description": null,
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "webformagendamento",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -608,
+        160
+      ],
+      "id": "8270dcff-7788-4ad2-9e27-ec2bf8d72778",
+      "name": "Webhook",
+      "webhookId": "SUBSTITUIR-POR-ID-PROPRIO"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        960,
+        -16
+      ],
+      "id": "4ad61aa0-3f1d-4ace-8d5b-d2e06b8f67b4",
+      "name": "Do Nothing"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://n8n.exemplo.com/send/text",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/json"
+            },
+            {
+              "name": "token",
+              "value": "=67b4c7d1-3b8f-4da4-ba39-9f61e3b82769"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "number",
+              "value": "=85981526879"
+            },
+            {
+              "name": "text",
+              "value": "=⚠️AGENDAMENTO PARADO⚠️"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        736,
+        -16
+      ],
+      "id": "ad1f1daf-9df9-4872-87ba-6abb949a4231",
+      "name": "HTTP Request1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://n8n.exemplo.com/send/text",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/json"
+            },
+            {
+              "name": "token",
+              "value": "=eed0e64e-1593-4270-b9a4-e3f466c51e5c"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "number",
+              "value": "={{ $json.Numero_Limpo }}"
+            },
+            {
+              "name": "text",
+              "value": "={{ $json.MensagemFinal }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        512,
+        -224
+      ],
+      "id": "ea42ec9a-c115-4f45-8a94-39143e19a882",
+      "name": "Dispáro Agendamento UAZAP",
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://n8n.exemplo.com/send/text",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/json"
+            },
+            {
+              "name": "token",
+              "value": "=eed0e64e-1593-4270-b9a4-e3f466c51e5c"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "number",
+              "value": "={{ $json.Numero_Limpo }}"
+            },
+            {
+              "name": "text",
+              "value": "={{ $json.MensagemFinal }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        512,
+        -32
+      ],
+      "id": "dae6a23b-8678-4b0a-9268-f6c82a38cc21",
+      "name": "Dispáro Agendamento UAZAP1",
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.body.tipo_agendamento }}",
+                    "rightValue": "Instalação",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "6cadef1e-c21e-4824-acf4-10e450e719c7"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Instalação"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "1fd4024b-cad3-4d09-9268-079c7edeb89b",
+                    "leftValue": "={{ $json.body.tipo_agendamento }}",
+                    "rightValue": "Retirada",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Retirada"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        -160,
+        -128
+      ],
+      "id": "5babe197-ed90-415c-9f50-6528ecb958a8",
+      "name": "Switch"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        960,
+        -208
+      ],
+      "id": "64236729-5366-4eca-b4cb-df43de30047c",
+      "name": "Do Nothing1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://n8n.exemplo.com/send/text",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/json"
+            },
+            {
+              "name": "token",
+              "value": "=67b4c7d1-3b8f-4da4-ba39-9f61e3b82769"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "number",
+              "value": "=85981526879"
+            },
+            {
+              "name": "text",
+              "value": "=⚠️AGENDAMENTO PARADO⚠️"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        736,
+        -208
+      ],
+      "id": "64cb0be9-7d8c-4a0e-b6d3-922fc0093d57",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "b38aba57-628e-4593-bda9-8c99b222c888",
+              "name": "Placa",
+              "value": "={{ $json.body.placa || 'Não Informado' }}",
+              "type": "string"
+            },
+            {
+              "id": "86664e75-1185-48a5-88f7-bcada49f8e09",
+              "name": "Nome",
+              "value": "={{ $json.body.nome }}",
+              "type": "string"
+            },
+            {
+              "id": "be8e7aff-857f-4d6f-a37b-1ed2dc174979",
+              "name": "CPF_CNPJ",
+              "value": "={{ $json.body.documento }}",
+              "type": "string"
+            },
+            {
+              "id": "e9568111-4441-4dd3-821a-5687f2950ec5",
+              "name": "Data_Turno",
+              "value": "={{ $json.body.data_formatada }} - {{ $json.body.turno }} ",
+              "type": "string"
+            },
+            {
+              "id": "eb1d0cd9-2c1c-4043-9b05-8d4db1fe7eff",
+              "name": "Numero_Limpo",
+              "value": "={{ $json.body.whatsapp }}",
+              "type": "string"
+            },
+            {
+              "id": "proto-1",
+              "name": "Protocolo",
+              "value": "={{ $json.protocolo }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        64,
+        -224
+      ],
+      "id": "3cc1fd75-a9b7-4a50-aa38-185c66985ba7",
+      "name": "Mensagem"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "b38aba57-628e-4593-bda9-8c99b222c888",
+              "name": "Placa",
+              "value": "={{ $json.body.placa || 'Não Informado' }}",
+              "type": "string"
+            },
+            {
+              "id": "86664e75-1185-48a5-88f7-bcada49f8e09",
+              "name": "Nome",
+              "value": "={{ $json.body.nome }}",
+              "type": "string"
+            },
+            {
+              "id": "be8e7aff-857f-4d6f-a37b-1ed2dc174979",
+              "name": "CPF_CNPJ",
+              "value": "={{ $json.body.documento }}",
+              "type": "string"
+            },
+            {
+              "id": "e9568111-4441-4dd3-821a-5687f2950ec5",
+              "name": "Data_Turno",
+              "value": "={{ $json.body.data_formatada }} - {{ $json.body.turno }} ",
+              "type": "string"
+            },
+            {
+              "id": "eb1d0cd9-2c1c-4043-9b05-8d4db1fe7eff",
+              "name": "Numero_Limpo",
+              "value": "={{ $json.body.whatsapp }}",
+              "type": "string"
+            },
+            {
+              "id": "proto-2",
+              "name": "Protocolo",
+              "value": "={{ $json.protocolo }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        64,
+        -32
+      ],
+      "id": "010ea49c-aa52-4193-882c-e99111771376",
+      "name": "Mensagem1"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT TOP 10 CLI.CodCliente, CLI.Nome, CLI.CGCCPF, CLI.Fone1, CLI.Celular,\n       O.Observações, O.FPgto, O.Emissão,\n       GV.Placa AS VeiculoPlaca, GV.Modelo AS VeiculoModelo\nFROM CLIENTES CLI\nLEFT JOIN Orçamentos O ON O.Cliente = CLI.CodCliente\nLEFT JOIN GRVeículos GV ON GV.Cliente = CLI.CodCliente AND GV.Placa = '{{ ($json.body.placa || \"\").toUpperCase().replace(/[^A-Z0-9]/g,\"\") }}'\nWHERE CLI.CGCCPF = '{{ $json.body.documento.replace(/\\D/g,'').replace(/^(\\d{3})(\\d{3})(\\d{3})(\\d{2})$/, '$1.$2.$3-$4').replace(/^(\\d{2})(\\d{3})(\\d{3})(\\d{4})(\\d{2})$/, '$1.$2.$3/$4-$5') }}'\nORDER BY O.Emissão DESC;\n"
+      },
+      "type": "n8n-nodes-base.microsoftSql",
+      "typeVersion": 1.1,
+      "position": [
+        -160,
+        160
+      ],
+      "id": "prod-sql-lookup",
+      "name": "Consultar Cliente SQL Server",
+      "credentials": {
+        "microsoftSql": {
+          "name": "microsoftSql account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const rows = items.map(i => i.json);\nconst webhookBody = $('Webhook').first().json.body;\nconst clientePlacaNorm = (webhookBody.placa || '').toUpperCase().replace(/[^A-Z0-9]/g, '');\nconst tipo = webhookBody.tipo_agendamento;\n\nconst pegar = (obs, termo) => {\n  const regex = new RegExp(termo + '[:\\s-]*(.*)', 'i');\n  const match = (obs || '').match(regex);\n  return match ? match[1].split('\\r')[0].split('\\n')[0].trim() : null;\n};\nconst normPlaca = (p) => (p || '').toUpperCase().replace(/[^A-Z0-9]/g, '');\n\nif (!rows.length || !rows[0].Nome) {\n  return [{ json: { _source: 'sql' } }];\n}\n\nconst base = rows[0];\n\nconst parsed = rows.map(o => {\n  const obs = o['Observações'] || '';\n  const placaRetirada = pegar(obs, 'PLACA RETIRADA EXTERNA') || pegar(obs, 'PLACA RETIRADA');\n  const placaInstalacao = pegar(obs, 'PLACA INSTALAÇÃO');\n  const plano = pegar(obs, 'PLANO ATUAL') || pegar(obs, 'Plano');\n  const taxa = pegar(obs, 'TAXA') || pegar(obs, 'V Instalação');\n  const placaRelevante = tipo === 'Retirada' ? placaRetirada : placaInstalacao;\n  return { plano, taxa, fpgto: o.FPgto, placaRelevanteNorm: normPlaca(placaRelevante) };\n});\n\nconst matched = parsed.find(o => o.placaRelevanteNorm && o.placaRelevanteNorm === clientePlacaNorm);\nconst chosen = matched || parsed[0] || {};\n\nreturn [{\n  json: {\n    _source: 'sql',\n    Nome: base.Nome,\n    CGCCPF: base.CGCCPF,\n    Fone1: base.Fone1,\n    Celular: base.Celular,\n    CodCliente: base.CodCliente,\n    VeiculoPlaca: base.VeiculoPlaca || null,\n    VeiculoModelo: base.VeiculoModelo || null,\n    plano: chosen.plano || null,\n    valor_adesao: chosen.taxa || null,\n    forma_pagamento: chosen.fpgto || null,\n  },\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        64,
+        160
+      ],
+      "id": "prod-tag-sql",
+      "name": "Tag SQL"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "pAx7Jm5seZpbdjgn7HFij",
+          "mode": "id"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "cpf": "={{ $json.body.documento.replace(/D/g,'') }}"
+          },
+          "matchingColumns": [
+            "cpf"
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        -160,
+        352
+      ],
+      "id": "prod-SistemaGestao-lookup",
+      "name": "Consultar Cliente SistemaGestao",
+      "continueOnFail": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "return items.map(i => ({ json: { _source: 'SistemaGestao', ...i.json } }));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        64,
+        352
+      ],
+      "id": "prod-tag-SistemaGestao",
+      "name": "Tag SistemaGestao"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        288,
+        256
+      ],
+      "id": "prod-merge",
+      "name": "Merge Consultas"
+    },
+    {
+      "parameters": {
+        "jsCode": "const all = items.map(i => i.json);\nconst sqlItem = all.find(x => x._source === 'sql' && x.Nome);\nconst gestaoItem = all.find(x => x._source === 'SistemaGestao' && (x.nome || x.associado));\nlet origem = 'none';\nlet nome = null, documento = null, telefone = null;\nlet cod_cliente = null, veiculo_placa = null, veiculo_modelo = null, plano = null, valor_adesao = null, forma_pagamento = null;\nif (sqlItem) {\n  origem = 'sql_server';\n  nome = sqlItem.Nome || null;\n  documento = sqlItem.CGCCPF || null;\n  telefone = sqlItem.Celular || sqlItem.Fone1 || null;\n  cod_cliente = sqlItem.CodCliente || null;\n  veiculo_placa = sqlItem.VeiculoPlaca || null;\n  veiculo_modelo = sqlItem.VeiculoModelo || null;\n  plano = sqlItem.plano || null;\n  valor_adesao = sqlItem.valor_adesao || null;\n  forma_pagamento = sqlItem.forma_pagamento || null;\n} else if (gestaoItem) {\n  origem = 'SistemaGestao';\n  const a = gestaoItem.associado || gestaoItem;\n  nome = a.nome || null;\n  documento = a.cpf || null;\n  telefone = a.telefone_whatsapp || a.telefone_fixo || null;\n  cod_cliente = a.cod_associado || null;\n  const veiculo = (gestaoItem.veiculos || a.veiculos || [])[0] || {};\n  veiculo_placa = veiculo.placa || null;\n  veiculo_modelo = veiculo.modelo || null;\n  plano = veiculo.nome_plano || null;\n}\nconst protocolo = $('Gerar Protocolo').first().json.protocolo;\nreturn [{\n  json: {\n    encontrado: origem !== 'none',\n    origem,\n    nome,\n    documento,\n    telefone,\n    protocolo,\n    cod_cliente,\n    veiculo_placa,\n    veiculo_modelo,\n    plano,\n    valor_adesao,\n    forma_pagamento,\n  },\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        512,
+        256
+      ],
+      "id": "prod-decide",
+      "name": "Decidir Fonte (prefere SQL)"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        736,
+        160
+      ],
+      "id": "prod-respond",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "jsCode": "const now = new Date();\nconst y = now.getFullYear();\nconst m = String(now.getMonth()+1).padStart(2,'0');\nconst d = String(now.getDate()).padStart(2,'0');\nconst rand = Math.random().toString(36).slice(2,7).toUpperCase();\nconst protocolo = `AG-${y}${m}${d}-${rand}`;\nreturn items.map(i => ({ json: { ...i.json, protocolo } }));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -384,
+        160
+      ],
+      "id": "gerar-protocolo",
+      "name": "Gerar Protocolo"
+    },
+    {
+      "parameters": {
+        "jsCode": "const src = $('Gerar Protocolo').first().json;\nconst b = src.body;\nconst proto = src.protocolo;\nconst modelo = $json.Modelo || null;\n\n// sem acento na chave de busca: o valor vem como \"Parque Dois Irmãos\"\nconst SEDES = [\n  { chave: 'MESSEJANA', endereco: 'Av. Gurgel do Amaral, 1037 - Messejana, Fortaleza - CE, 60810-360' },\n  { chave: 'DOIS IRM', endereco: 'R. A (Lot. Parque Montenegro 1), 981 - Parque Dois Irmãos, Fortaleza - CE, 60540-256' },\n];\n\nconst sedeNome = String(b.sede == null ? '' : b.sede).trim();\nconst ehSede = sedeNome.length > 0;\nlet sedeEndereco = '';\nif (ehSede) {\n  const alvo = sedeNome.toUpperCase();\n  for (const s of SEDES) {\n    if (alvo.indexOf(s.chave) >= 0) { sedeEndereco = s.endereco; break; }\n  }\n}\n\nlet agenda = '';\nif (b.data_formatada && b.turno) {\n  agenda = `📅 Data: ${b.data_formatada} - Turno: ${b.turno}`;\n}\n\nconst placaTexto = b.placa || 'Não informado';\nconst placaLinha = modelo ? `🚗 Placa: ${placaTexto} (${modelo})` : `🚗 Placa: ${placaTexto}`;\n\nconst linhas = [];\nlinhas.push(`Olá, ${b.nome}! ✅`);\nlinhas.push('Seu agendamento de *instalação* foi confirmado com sucesso pelo nosso portal.');\nlinhas.push('');\nlinhas.push(`📋 Protocolo: ${proto}`);\nlinhas.push(placaLinha);\n\nif (ehSede) {\n  linhas.push(`🏢 Sede: ${sedeNome}`);\n  if (sedeEndereco) linhas.push(`📍 ${sedeEndereco}`);\n} else if (b.endereco) {\n  linhas.push(`📍 Endereço: ${b.endereco.rua}, ${b.endereco.numero} - ${b.endereco.bairro}` + (b.endereco.referencia ? ` (${b.endereco.referencia})` : ''));\n}\nif (agenda) linhas.push(agenda);\n\nlinhas.push('');\n// atendimento na sede: o cliente é que vai até nós, não faz sentido falar em visita do técnico\nif (ehSede) {\n  linhas.push('Compareça em dia útil, dentro do horário comercial, com um documento com foto (CPF ou RG), e dirija-se à recepção.');\n} else {\n  linhas.push('Nosso técnico fará contato antes de ir ao local.');\n}\nlinhas.push('Guarde o número de protocolo.');\nlinhas.push('');\nlinhas.push('Qualquer dúvida, estamos à disposição.');\nlinhas.push('Empresa Exemplo');\n\nconst MensagemFinal = linhas.join('\\n');\nconst numeroLimpo = $('Mensagem').first().json.Numero_Limpo;\nreturn items.map(i => ({ json: { ...i.json, Numero_Limpo: numeroLimpo, MensagemFinal } }));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        288,
+        -224
+      ],
+      "id": "montar-mensagem",
+      "name": "Montar Mensagem"
+    },
+    {
+      "parameters": {
+        "jsCode": "const src = $('Gerar Protocolo').first().json;\nconst b = src.body;\nconst proto = src.protocolo;\nconst modelo = $json.Modelo || null;\nconst local = b.endereco ? `📍 Endereço: ${b.endereco.rua}, ${b.endereco.numero} - ${b.endereco.bairro}` + (b.endereco.referencia ? ` (${b.endereco.referencia})` : '') : '';\nconst agenda = (b.data_formatada && b.turno) ? `📅 Data: ${b.data_formatada} - Turno: ${b.turno}` : '';\nconst placaTexto = b.placa || 'Não informado';\nconst placaLinha = modelo ? `🚗 Placa: ${placaTexto} (${modelo})` : `🚗 Placa: ${placaTexto}`;\nconst linhas = [];\nlinhas.push(`Olá, ${b.nome}! ✅`);\nlinhas.push('Seu agendamento de *retirada* foi confirmado com sucesso pelo nosso portal.');\nlinhas.push('');\nlinhas.push(`📋 Protocolo: ${proto}`);\nlinhas.push(placaLinha);\nif (local) linhas.push(local);\nif (agenda) linhas.push(agenda);\nlinhas.push('');\nlinhas.push('Nosso técnico fará contato antes de ir ao local.');\nlinhas.push('Guarde o número de protocolo.');\nlinhas.push('');\nlinhas.push('Qualquer dúvida, estamos à disposição.');\nlinhas.push('Empresa Exemplo');\nconst MensagemFinal = linhas.join('\\n');\nconst numeroLimpo = $('Mensagem1').first().json.Numero_Limpo;\nreturn items.map(i => ({ json: { ...i.json, Numero_Limpo: numeroLimpo, MensagemFinal } }));\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        288,
+        -32
+      ],
+      "id": "montar-mensagem1",
+      "name": "Montar Mensagem1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "loose"
+          },
+          "conditions": [
+            {
+              "id": "isGestao1",
+              "leftValue": "={{ $json.origem }}",
+              "rightValue": "SistemaGestao",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        736,
+        352
+      ],
+      "id": "e-cliente-SistemaGestao-if",
+      "name": "E Cliente SistemaGestao?"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1uS7B8huS1-WovSdHRQb7HbWTkaoywYB1C8bBXP-qE0M",
+          "mode": "list",
+          "cachedResultName": "SERVICOS",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1uS7B8huS1-WovSdHRQb7HbWTkaoywYB1C8bBXP-qE0M/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 2011226510,
+          "mode": "list",
+          "cachedResultName": "INSTALACOES 2.0",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1uS7B8huS1-WovSdHRQb7HbWTkaoywYB1C8bBXP-qE0M/edit#gid=2011226510"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        960,
+        336
+      ],
+      "id": "ler-instalacoes-buscar",
+      "name": "Ler Instalacoes (buscar CPF)",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "name": "googleSheetsOAuth2Api account"
+        }
+      },
+      "continueOnFail": true,
+      "onError": "continueRegularOutput",
+      "retryOnFail": true,
+      "maxTries": 4,
+      "waitBetweenTries": 3000
+    },
+    {
+      "parameters": {
+        "jsCode": "const decidido = $('Decidir Fonte (prefere SQL)').first().json;\nconst body = $('Gerar Protocolo').first().json.body;\n\nconst soDigitos = (v) => String(v == null ? '' : v).replace(/[^0-9]/g, '');\nconst normPlaca = (v) => String(v == null ? '' : v).toUpperCase().replace(/[^A-Z0-9]/g, '');\n\nconst cpfAlvo = soDigitos(decidido.documento || body.documento);\nif (!cpfAlvo) return [{ json: { found: false, motivo: 'sem_cpf' } }];\n\nconst placaAlvo = normPlaca(body.placa);\nconst rows = items.map(i => i.json);\nconst candidatos = rows.filter(r => soDigitos(r.CPF) === cpfAlvo);\n\nif (candidatos.length === 0) return [{ json: { found: false, motivo: 'cpf_nao_encontrado' } }];\n\n// 1) CPF + placa: único jeito de saber QUAL veículo quando o associado tem várias linhas (adição)\nif (placaAlvo) {\n  const porPlaca = candidatos.find(r => normPlaca(r.PLACA) === placaAlvo);\n  if (porPlaca) {\n    return [{ json: { found: true, row_number: porPlaca.row_number, criterio: 'cpf_placa' } }];\n  }\n}\n\n// 2) linha única: não existe ambiguidade possível, então marca mesmo se a placa não bater\n//    (cobre erro de digitação do cliente no formulário e linha antiga sem placa)\nif (candidatos.length === 1) {\n  return [{ json: { found: true, row_number: candidatos[0].row_number, criterio: 'cpf_unico' } }];\n}\n\n// 3) várias linhas e nenhuma placa batendo: não dá pra saber qual veículo é.\n//    Marcar a linha errada vincularia o veículo à OS errada, então prefere não marcar.\nreturn [{ json: { found: false, motivo: 'ambiguo', candidatos: candidatos.length } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1184,
+        336
+      ],
+      "id": "achar-linha-cliente",
+      "name": "Achar Linha do Cliente"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "loose"
+          },
+          "conditions": [
+            {
+              "id": "found1",
+              "leftValue": "={{ $json.found }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        1408,
+        336
+      ],
+      "id": "encontrado-na-planilha-if",
+      "name": "Encontrado na Planilha?"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1uS7B8huS1-WovSdHRQb7HbWTkaoywYB1C8bBXP-qE0M",
+          "mode": "list",
+          "cachedResultName": "SERVICOS",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1uS7B8huS1-WovSdHRQb7HbWTkaoywYB1C8bBXP-qE0M/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 2011226510,
+          "mode": "list",
+          "cachedResultName": "INSTALACOES 2.0",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1uS7B8huS1-WovSdHRQb7HbWTkaoywYB1C8bBXP-qE0M/edit#gid=2011226510"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "row_number": "={{ $json.row_number }}",
+            "STATUS": "AGENDADO"
+          },
+          "matchingColumns": [
+            "row_number"
+          ],
+          "schema": []
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        1632,
+        320
+      ],
+      "id": "atualizar-status-instalacoes",
+      "name": "Atualizar Status para Agendado",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "name": "googleSheetsOAuth2Api account"
+        }
+      },
+      "continueOnFail": true,
+      "onError": "continueRegularOutput",
+      "retryOnFail": true,
+      "maxTries": 4,
+      "waitBetweenTries": 3000
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT TOP 1 Modelo FROM GRVeículos WHERE Placa = '{{ $json.Placa.toUpperCase().replace(/[^A-Z0-9]/g,\"\") }}'",
+        "options": {}
+      },
+      "id": "3f3f0c99-172d-4210-b0d6-11cb21275ee0",
+      "name": "Buscar Modelo Veiculo",
+      "type": "n8n-nodes-base.microsoftSql",
+      "typeVersion": 1,
+      "position": [
+        176,
+        -224
+      ],
+      "credentials": {
+        "microsoftSql": {
+          "name": "microsoftSql account"
+        }
+      },
+      "alwaysOutputData": true,
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT TOP 1 Modelo FROM GRVeículos WHERE Placa = '{{ $json.Placa.toUpperCase().replace(/[^A-Z0-9]/g,\"\") }}'",
+        "options": {}
+      },
+      "id": "7b9bb511-a38a-465c-b7e6-f2d9718f3d68",
+      "name": "Buscar Modelo Veiculo1",
+      "type": "n8n-nodes-base.microsoftSql",
+      "typeVersion": 1,
+      "position": [
+        176,
+        -32
+      ],
+      "credentials": {
+        "microsoftSql": {
+          "name": "microsoftSql account"
+        }
+      },
+      "alwaysOutputData": true,
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "jsCode": "const body = $('Gerar Protocolo').first().json.body;\nconst protocolo = $('Gerar Protocolo').first().json.protocolo;\nconst achar = $json;\nconst fonte = $('Decidir Fonte (prefere SQL)').first().json;\n\nconst now = new Date();\nconst dataStr = String(now.getDate()).padStart(2,'0') + '/' + String(now.getMonth()+1).padStart(2,'0') + '/' + now.getFullYear();\n\nfunction soDigitos(v) { return String(v == null ? '' : v).replace(/[^0-9]/g, ''); }\nfunction formatarCPF(v) {\n  const d = soDigitos(v);\n  if (d.length === 11) return d.slice(0,3) + '.' + d.slice(3,6) + '.' + d.slice(6,9) + '-' + d.slice(9);\n  if (d.length === 14) return d.slice(0,2) + '.' + d.slice(2,5) + '.' + d.slice(5,8) + '/' + d.slice(8,12) + '-' + d.slice(12);\n  return String(v == null ? '' : v).trim();\n}\n\nlet motivoTexto;\nif (achar.motivo === 'sem_cpf') {\n  motivoTexto = 'Sem CPF informado no agendamento.';\n} else {\n  const sistema = fonte && fonte.origem === 'sql_server' ? 'Empresa Exemplo' : 'RESOLVE';\n  const clienteAchado = !!(fonte && fonte.encontrado);\n\n  if (clienteAchado) {\n    motivoTexto = 'Veiculo nao encontrado no cadastro do cliente na ' + sistema + ' (codigo ' + fonte.cod_cliente + ') - confirme a placa.';\n  } else {\n    motivoTexto = 'Cliente nao encontrado nem na Empresa Exemplo nem na Marca C - provavel cadastro novo.';\n  }\n\n  if (achar.motivo === 'ambiguo') {\n    motivoTexto += ' CPF tem mais de um veiculo na planilha de instalacoes e nenhum bateu com a placa informada.';\n  }\n}\n\nconst agenda = (body.data_formatada && body.turno) ? (body.data_formatada + ' - ' + body.turno) : 'sem data/turno definida';\n\nreturn [{ json: {\n  DATA: dataStr,\n  ASSOCIADO: String(body.nome == null ? '' : body.nome).trim(),\n  CPF: formatarCPF(body.documento),\n  PLACA: String(body.placa == null ? '' : body.placa).toUpperCase().trim(),\n  STATUS: 'ANÁLISE PENDENTE',\n  ASSINATURA: now.toISOString(),\n  AGENDAMENTO: 'ANÁLISE PENDENTE: ' + motivoTexto + ' Protocolo ' + protocolo + '. Agenda: ' + agenda + '.',\n  PLANO: '',\n  VALOR_ADESAO: '',\n  TELEFONE: String(body.whatsapp == null ? '' : body.whatsapp).trim(),\n} }];\n"
+      },
+      "id": "montar-linha-pendente-01",
+      "name": "Montar Linha Pendente",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1528,
+        496
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1uS7B8huS1-WovSdHRQb7HbWTkaoywYB1C8bBXP-qE0M",
+          "mode": "list",
+          "cachedResultName": "SERVICOS",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1uS7B8huS1-WovSdHRQb7HbWTkaoywYB1C8bBXP-qE0M/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 2011226510,
+          "mode": "list",
+          "cachedResultName": "INSTALACOES 2.0",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1uS7B8huS1-WovSdHRQb7HbWTkaoywYB1C8bBXP-qE0M/edit#gid=2011226510"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "DATA": "={{ $json.DATA }}",
+            "ASSOCIADO": "={{ $json.ASSOCIADO }}",
+            "CPF": "={{ $json.CPF }}",
+            "PLACA": "={{ $json.PLACA }}",
+            "STATUS": "={{ $json.STATUS }}",
+            "ASSINATURA": "={{ $json.ASSINATURA }}",
+            "AGENDAMENTO": "={{ $json.AGENDAMENTO }}",
+            "PLANO": "={{ $json.PLANO }}",
+            "VALOR_ADESAO": "={{ $json.VALOR_ADESAO }}",
+            "TELEFONE": "={{ $json.TELEFONE }}"
+          },
+          "matchingColumns": [],
+          "schema": []
+        },
+        "options": {}
+      },
+      "id": "sinalizar-vinculo-pendente-01",
+      "name": "Sinalizar Vinculo Pendente",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        1748,
+        496
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "name": "googleSheetsOAuth2Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "loose"
+          },
+          "conditions": [
+            {
+              "id": "legado-confirma-1",
+              "leftValue": "={{ !!($('Decidir Fonte (prefere SQL)').first().json.encontrado && $('Decidir Fonte (prefere SQL)').first().json.veiculo_placa) }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "legado-confirma-vinculo-if",
+      "name": "Legado Confirma Vinculo?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        1408,
+        336
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const body = $('Gerar Protocolo').first().json.body;\nconst protocolo = $('Gerar Protocolo').first().json.protocolo;\nconst fonte = $('Decidir Fonte (prefere SQL)').first().json;\n\nconst now = new Date();\nconst dataStr = String(now.getDate()).padStart(2,'0') + '/' + String(now.getMonth()+1).padStart(2,'0') + '/' + now.getFullYear();\n\nfunction soDigitos(v) { return String(v == null ? '' : v).replace(/[^0-9]/g, ''); }\nfunction formatarCPF(v) {\n  const d = soDigitos(v);\n  if (d.length === 11) return d.slice(0,3) + '.' + d.slice(3,6) + '.' + d.slice(6,9) + '-' + d.slice(9);\n  if (d.length === 14) return d.slice(0,2) + '.' + d.slice(2,5) + '.' + d.slice(5,8) + '/' + d.slice(8,12) + '-' + d.slice(12);\n  return String(v == null ? '' : v).trim();\n}\n\nconst dataAgendamento = body.data_formatada || dataStr;\nconst dataCurta = dataAgendamento.slice(0,5);\nconst turnoTexto = body.turno ? String(body.turno).toUpperCase() : '';\n\nconst nome = fonte.nome || body.nome || '';\nconst documento = fonte.documento || body.documento;\nconst placa = fonte.veiculo_placa || body.placa || '';\nconst telefone = fonte.telefone || body.whatsapp || '';\n\nconst agendamentoTexto = 'AGENDAMENTO ' + dataCurta + ' - PROTOCOLO ' + protocolo + ' - PORTAL' + (turnoTexto ? ' - ' + turnoTexto : '');\n\nreturn [{ json: {\n  DATA: dataStr,\n  ASSOCIADO: String(nome).trim().toUpperCase(),\n  CPF: formatarCPF(documento),\n  PLACA: String(placa).toUpperCase().trim(),\n  STATUS: 'AGENDADO',\n  ASSINATURA: now.toISOString(),\n  AGENDAMENTO: agendamentoTexto,\n  PLANO: fonte.plano || '',\n  VALOR_ADESAO: fonte.valor_adesao || '',\n  TELEFONE: String(telefone).trim(),\n} }];\n"
+      },
+      "id": "montar-linha-confirmada-01",
+      "name": "Montar Linha Confirmada Legado",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1588,
+        336
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "loose"
+          },
+          "conditions": [
+            {
+              "id": "e-instalacao-1",
+              "leftValue": "={{ $('Gerar Protocolo').first().json.body.tipo_agendamento }}",
+              "rightValue": "instalacao",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "e-instalacao-if-01",
+      "name": "É Instalação?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        780,
+        336
+      ]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Gerar Protocolo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request1": {
+      "main": [
+        [
+          {
+            "node": "Do Nothing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Dispáro Agendamento UAZAP1": {
+      "main": [
+        [],
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Mensagem",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Mensagem1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Dispáro Agendamento UAZAP": {
+      "main": [
+        [
+          {
+            "node": "Do Nothing1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Do Nothing1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mensagem": {
+      "main": [
+        [
+          {
+            "node": "Buscar Modelo Veiculo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mensagem1": {
+      "main": [
+        [
+          {
+            "node": "Buscar Modelo Veiculo1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Consultar Cliente SQL Server": {
+      "main": [
+        [
+          {
+            "node": "Tag SQL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tag SQL": {
+      "main": [
+        [
+          {
+            "node": "Merge Consultas",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Consultar Cliente SistemaGestao": {
+      "main": [
+        [
+          {
+            "node": "Tag SistemaGestao",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tag SistemaGestao": {
+      "main": [
+        [
+          {
+            "node": "Merge Consultas",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge Consultas": {
+      "main": [
+        [
+          {
+            "node": "Decidir Fonte (prefere SQL)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Decidir Fonte (prefere SQL)": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "É Instalação?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gerar Protocolo": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Consultar Cliente SQL Server",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Consultar Cliente SistemaGestao",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Montar Mensagem": {
+      "main": [
+        [
+          {
+            "node": "Dispáro Agendamento UAZAP",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Montar Mensagem1": {
+      "main": [
+        [
+          {
+            "node": "Dispáro Agendamento UAZAP1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "E Cliente SistemaGestao?": {
+      "main": [
+        [
+          {
+            "node": "Ler Instalacoes (buscar CPF)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Ler Instalacoes (buscar CPF)": {
+      "main": [
+        [
+          {
+            "node": "Achar Linha do Cliente",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Achar Linha do Cliente": {
+      "main": [
+        [
+          {
+            "node": "Encontrado na Planilha?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Encontrado na Planilha?": {
+      "main": [
+        [
+          {
+            "node": "Atualizar Status para Agendado",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Legado Confirma Vinculo?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Buscar Modelo Veiculo": {
+      "main": [
+        [
+          {
+            "node": "Montar Mensagem",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Buscar Modelo Veiculo1": {
+      "main": [
+        [
+          {
+            "node": "Montar Mensagem1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Montar Linha Pendente": {
+      "main": [
+        [
+          {
+            "node": "Sinalizar Vinculo Pendente",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Legado Confirma Vinculo?": {
+      "main": [
+        [
+          {
+            "node": "Montar Linha Confirmada Legado",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Montar Linha Pendente",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Montar Linha Confirmada Legado": {
+      "main": [
+        [
+          {
+            "node": "Sinalizar Vinculo Pendente",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "É Instalação?": {
+      "main": [
+        [
+          {
+            "node": "Ler Instalacoes (buscar CPF)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Do Nothing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false,
+    "callerPolicy": "workflowsFromSameOwner",
+    "saveDataErrorExecution": "none",
+    "saveDataSuccessExecution": "none",
+    "saveExecutionProgress": false
+  },
+  "staticData": null,
+  "activeVersionId": "81d748ca-157e-4bd3-b79a-fb7af1cda074",
+  "versionCounter": 273,
+  "triggerCount": 1,
+  "activeVersion": {
+    "updatedAt": "2026-10-28T15:26:48.150Z",
+    "createdAt": "2026-10-28T15:26:48.150Z",
+    "versionId": "81d748ca-157e-4bd3-b79a-fb7af1cda074",
+    "workflowId": "n7UmevheoHcPUngxMPzVS",
+    "nodes": [
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "webformagendamento",
+          "responseMode": "responseNode",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2.1,
+        "position": [
+          -608,
+          160
+        ],
+        "id": "8270dcff-7788-4ad2-9e27-ec2bf8d72778",
+        "name": "Webhook",
+        "webhookId": "bac92aa9-d385-49b9-b561-54c3705a7f01"
+      },
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.noOp",
+        "typeVersion": 1,
+        "position": [
+          960,
+          -16
+        ],
+        "id": "4ad61aa0-3f1d-4ace-8d5b-d2e06b8f67b4",
+        "name": "Do Nothing"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "=https://n8n.exemplo.com/send/text",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Accept",
+                "value": "application/json"
+              },
+              {
+                "name": "token",
+                "value": "=67b4c7d1-3b8f-4da4-ba39-9f61e3b82769"
+              }
+            ]
+          },
+          "sendBody": true,
+          "bodyParameters": {
+            "parameters": [
+              {
+                "name": "number",
+                "value": "=85981526879"
+              },
+              {
+                "name": "text",
+                "value": "=⚠️AGENDAMENTO PARADO⚠️"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          736,
+          -16
+        ],
+        "id": "ad1f1daf-9df9-4872-87ba-6abb949a4231",
+        "name": "HTTP Request1"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "=https://n8n.exemplo.com/send/text",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Accept",
+                "value": "application/json"
+              },
+              {
+                "name": "token",
+                "value": "=eed0e64e-1593-4270-b9a4-e3f466c51e5c"
+              }
+            ]
+          },
+          "sendBody": true,
+          "bodyParameters": {
+            "parameters": [
+              {
+                "name": "number",
+                "value": "={{ $json.Numero_Limpo }}"
+              },
+              {
+                "name": "text",
+                "value": "={{ $json.MensagemFinal }}"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          512,
+          -224
+        ],
+        "id": "ea42ec9a-c115-4f45-8a94-39143e19a882",
+        "name": "Dispáro Agendamento UAZAP",
+        "onError": "continueErrorOutput"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "=https://n8n.exemplo.com/send/text",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Accept",
+                "value": "application/json"
+              },
+              {
+                "name": "token",
+                "value": "=eed0e64e-1593-4270-b9a4-e3f466c51e5c"
+              }
+            ]
+          },
+          "sendBody": true,
+          "bodyParameters": {
+            "parameters": [
+              {
+                "name": "number",
+                "value": "={{ $json.Numero_Limpo }}"
+              },
+              {
+                "name": "text",
+                "value": "={{ $json.MensagemFinal }}"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          512,
+          -32
+        ],
+        "id": "dae6a23b-8678-4b0a-9268-f6c82a38cc21",
+        "name": "Dispáro Agendamento UAZAP1",
+        "onError": "continueErrorOutput"
+      },
+      {
+        "parameters": {
+          "rules": {
+            "values": [
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 3
+                  },
+                  "conditions": [
+                    {
+                      "leftValue": "={{ $json.body.tipo_agendamento }}",
+                      "rightValue": "Instalação",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals"
+                      },
+                      "id": "6cadef1e-c21e-4824-acf4-10e450e719c7"
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "Instalação"
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 3
+                  },
+                  "conditions": [
+                    {
+                      "id": "1fd4024b-cad3-4d09-9268-079c7edeb89b",
+                      "leftValue": "={{ $json.body.tipo_agendamento }}",
+                      "rightValue": "Retirada",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals",
+                        "name": "filter.operator.equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "Retirada"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.switch",
+        "typeVersion": 3.4,
+        "position": [
+          -160,
+          -128
+        ],
+        "id": "5babe197-ed90-415c-9f50-6528ecb958a8",
+        "name": "Switch"
+      },
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.noOp",
+        "typeVersion": 1,
+        "position": [
+          960,
+          -208
+        ],
+        "id": "64236729-5366-4eca-b4cb-df43de30047c",
+        "name": "Do Nothing1"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "=https://n8n.exemplo.com/send/text",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Accept",
+                "value": "application/json"
+              },
+              {
+                "name": "token",
+                "value": "=67b4c7d1-3b8f-4da4-ba39-9f61e3b82769"
+              }
+            ]
+          },
+          "sendBody": true,
+          "bodyParameters": {
+            "parameters": [
+              {
+                "name": "number",
+                "value": "=85981526879"
+              },
+              {
+                "name": "text",
+                "value": "=⚠️AGENDAMENTO PARADO⚠️"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          736,
+          -208
+        ],
+        "id": "64cb0be9-7d8c-4a0e-b6d3-922fc0093d57",
+        "name": "HTTP Request"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "b38aba57-628e-4593-bda9-8c99b222c888",
+                "name": "Placa",
+                "value": "={{ $json.body.placa || 'Não Informado' }}",
+                "type": "string"
+              },
+              {
+                "id": "86664e75-1185-48a5-88f7-bcada49f8e09",
+                "name": "Nome",
+                "value": "={{ $json.body.nome }}",
+                "type": "string"
+              },
+              {
+                "id": "be8e7aff-857f-4d6f-a37b-1ed2dc174979",
+                "name": "CPF_CNPJ",
+                "value": "={{ $json.body.documento }}",
+                "type": "string"
+              },
+              {
+                "id": "e9568111-4441-4dd3-821a-5687f2950ec5",
+                "name": "Data_Turno",
+                "value": "={{ $json.body.data_formatada }} - {{ $json.body.turno }} ",
+                "type": "string"
+              },
+              {
+                "id": "eb1d0cd9-2c1c-4043-9b05-8d4db1fe7eff",
+                "name": "Numero_Limpo",
+                "value": "={{ $json.body.whatsapp }}",
+                "type": "string"
+              },
+              {
+                "id": "proto-1",
+                "name": "Protocolo",
+                "value": "={{ $json.protocolo }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          64,
+          -224
+        ],
+        "id": "3cc1fd75-a9b7-4a50-aa38-185c66985ba7",
+        "name": "Mensagem"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "b38aba57-628e-4593-bda9-8c99b222c888",
+                "name": "Placa",
+                "value": "={{ $json.body.placa || 'Não Informado' }}",
+                "type": "string"
+              },
+              {
+                "id": "86664e75-1185-48a5-88f7-bcada49f8e09",
+                "name": "Nome",
+                "value": "={{ $json.body.nome }}",
+                "type": "string"
+              },
+              {
+                "id": "be8e7aff-857f-4d6f-a37b-1ed2dc174979",
+                "name": "CPF_CNPJ",
+                "value": "={{ $json.body.documento }}",
+                "type": "string"
+              },
+              {
+                "id": "e9568111-4441-4dd3-821a-5687f2950ec5",
+                "name": "Data_Turno",
+                "value": "={{ $json.body.data_formatada }} - {{ $json.body.turno }} ",
+                "type": "string"
+              },
+              {
+                "id": "eb1d0cd9-2c1c-4043-9b05-8d4db1fe7eff",
+                "name": "Numero_Limpo",
+                "value": "={{ $json.body.whatsapp }}",
+                "type": "string"
+              },
+              {
+                "id": "proto-2",
+                "name": "Protocolo",
+                "value": "={{ $json.protocolo }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          64,
+          -32
+        ],
+        "id": "010ea49c-aa52-4193-882c-e99111771376",
+        "name": "Mensagem1"
+      },
+      {
+        "parameters": {
+          "operation": "executeQuery",
+          "query": "SELECT TOP 10 CLI.CodCliente, CLI.Nome, CLI.CGCCPF, CLI.Fone1, CLI.Celular,\n       O.Observações, O.FPgto, O.Emissão,\n       GV.Placa AS VeiculoPlaca, GV.Modelo AS VeiculoModelo\nFROM CLIENTES CLI\nLEFT JOIN Orçamentos O ON O.Cliente = CLI.CodCliente\nLEFT JOIN GRVeículos GV ON GV.Cliente = CLI.CodCliente AND GV.Placa = '{{ ($json.body.placa || \"\").toUpperCase().replace(/[^A-Z0-9]/g,\"\") }}'\nWHERE CLI.CGCCPF = '{{ $json.body.documento.replace(/\\D/g,'').replace(/^(\\d{3})(\\d{3})(\\d{3})(\\d{2})$/, '$1.$2.$3-$4').replace(/^(\\d{2})(\\d{3})(\\d{3})(\\d{4})(\\d{2})$/, '$1.$2.$3/$4-$5') }}'\nORDER BY O.Emissão DESC;\n"
+        },
+        "type": "n8n-nodes-base.microsoftSql",
+        "typeVersion": 1.1,
+        "position": [
+          -160,
+          160
+        ],
+        "id": "prod-sql-lookup",
+        "name": "Consultar Cliente SQL Server",
+        "credentials": {
+          "microsoftSql": {
+            "id": "L9s5H74bQMTWfPdN",
+            "name": "SQL Service"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "jsCode": "const rows = items.map(i => i.json);\nconst webhookBody = $('Webhook').first().json.body;\nconst clientePlacaNorm = (webhookBody.placa || '').toUpperCase().replace(/[^A-Z0-9]/g, '');\nconst tipo = webhookBody.tipo_agendamento;\n\nconst pegar = (obs, termo) => {\n  const regex = new RegExp(termo + '[:\\s-]*(.*)', 'i');\n  const match = (obs || '').match(regex);\n  return match ? match[1].split('\\r')[0].split('\\n')[0].trim() : null;\n};\nconst normPlaca = (p) => (p || '').toUpperCase().replace(/[^A-Z0-9]/g, '');\n\nif (!rows.length || !rows[0].Nome) {\n  return [{ json: { _source: 'sql' } }];\n}\n\nconst base = rows[0];\n\nconst parsed = rows.map(o => {\n  const obs = o['Observações'] || '';\n  const placaRetirada = pegar(obs, 'PLACA RETIRADA EXTERNA') || pegar(obs, 'PLACA RETIRADA');\n  const placaInstalacao = pegar(obs, 'PLACA INSTALAÇÃO');\n  const plano = pegar(obs, 'PLANO ATUAL') || pegar(obs, 'Plano');\n  const taxa = pegar(obs, 'TAXA') || pegar(obs, 'V Instalação');\n  const placaRelevante = tipo === 'Retirada' ? placaRetirada : placaInstalacao;\n  return { plano, taxa, fpgto: o.FPgto, placaRelevanteNorm: normPlaca(placaRelevante) };\n});\n\nconst matched = parsed.find(o => o.placaRelevanteNorm && o.placaRelevanteNorm === clientePlacaNorm);\nconst chosen = matched || parsed[0] || {};\n\nreturn [{\n  json: {\n    _source: 'sql',\n    Nome: base.Nome,\n    CGCCPF: base.CGCCPF,\n    Fone1: base.Fone1,\n    Celular: base.Celular,\n    CodCliente: base.CodCliente,\n    VeiculoPlaca: base.VeiculoPlaca || null,\n    VeiculoModelo: base.VeiculoModelo || null,\n    plano: chosen.plano || null,\n    valor_adesao: chosen.taxa || null,\n    forma_pagamento: chosen.fpgto || null,\n  },\n}];\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          64,
+          160
+        ],
+        "id": "prod-tag-sql",
+        "name": "Tag SQL"
+      },
+      {
+        "parameters": {
+          "workflowId": {
+            "__rl": true,
+            "value": "pAx7Jm5seZpbdjgn7HFij",
+            "mode": "id"
+          },
+          "workflowInputs": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "cpf": "={{ $json.body.documento.replace(/D/g,'') }}"
+            },
+            "matchingColumns": [
+              "cpf"
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.executeWorkflow",
+        "typeVersion": 1.2,
+        "position": [
+          -160,
+          352
+        ],
+        "id": "prod-SistemaGestao-lookup",
+        "name": "Consultar Cliente SistemaGestao",
+        "continueOnFail": true,
+        "onError": "continueRegularOutput"
+      },
+      {
+        "parameters": {
+          "jsCode": "return items.map(i => ({ json: { _source: 'SistemaGestao', ...i.json } }));"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          64,
+          352
+        ],
+        "id": "prod-tag-SistemaGestao",
+        "name": "Tag SistemaGestao"
+      },
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.merge",
+        "typeVersion": 3.2,
+        "position": [
+          288,
+          256
+        ],
+        "id": "prod-merge",
+        "name": "Merge Consultas"
+      },
+      {
+        "parameters": {
+          "jsCode": "const all = items.map(i => i.json);\nconst sqlItem = all.find(x => x._source === 'sql' && x.Nome);\nconst gestaoItem = all.find(x => x._source === 'SistemaGestao' && (x.nome || x.associado));\nlet origem = 'none';\nlet nome = null, documento = null, telefone = null;\nlet cod_cliente = null, veiculo_placa = null, veiculo_modelo = null, plano = null, valor_adesao = null, forma_pagamento = null;\nif (sqlItem) {\n  origem = 'sql_server';\n  nome = sqlItem.Nome || null;\n  documento = sqlItem.CGCCPF || null;\n  telefone = sqlItem.Celular || sqlItem.Fone1 || null;\n  cod_cliente = sqlItem.CodCliente || null;\n  veiculo_placa = sqlItem.VeiculoPlaca || null;\n  veiculo_modelo = sqlItem.VeiculoModelo || null;\n  plano = sqlItem.plano || null;\n  valor_adesao = sqlItem.valor_adesao || null;\n  forma_pagamento = sqlItem.forma_pagamento || null;\n} else if (gestaoItem) {\n  origem = 'SistemaGestao';\n  const a = gestaoItem.associado || gestaoItem;\n  nome = a.nome || null;\n  documento = a.cpf || null;\n  telefone = a.telefone_whatsapp || a.telefone_fixo || null;\n  cod_cliente = a.cod_associado || null;\n  const veiculo = (gestaoItem.veiculos || a.veiculos || [])[0] || {};\n  veiculo_placa = veiculo.placa || null;\n  veiculo_modelo = veiculo.modelo || null;\n  plano = veiculo.nome_plano || null;\n}\nconst protocolo = $('Gerar Protocolo').first().json.protocolo;\nreturn [{\n  json: {\n    encontrado: origem !== 'none',\n    origem,\n    nome,\n    documento,\n    telefone,\n    protocolo,\n    cod_cliente,\n    veiculo_placa,\n    veiculo_modelo,\n    plano,\n    valor_adesao,\n    forma_pagamento,\n  },\n}];\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          512,
+          256
+        ],
+        "id": "prod-decide",
+        "name": "Decidir Fonte (prefere SQL)"
+      },
+      {
+        "parameters": {
+          "respondWith": "json",
+          "responseBody": "={{ $json }}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.respondToWebhook",
+        "typeVersion": 1.4,
+        "position": [
+          736,
+          160
+        ],
+        "id": "prod-respond",
+        "name": "Respond to Webhook"
+      },
+      {
+        "parameters": {
+          "jsCode": "const now = new Date();\nconst y = now.getFullYear();\nconst m = String(now.getMonth()+1).padStart(2,'0');\nconst d = String(now.getDate()).padStart(2,'0');\nconst rand = Math.random().toString(36).slice(2,7).toUpperCase();\nconst protocolo = `AG-${y}${m}${d}-${rand}`;\nreturn items.map(i => ({ json: { ...i.json, protocolo } }));"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          -384,
+          160
+        ],
+        "id": "gerar-protocolo",
+        "name": "Gerar Protocolo"
+      },
+      {
+        "parameters": {
+          "jsCode": "const src = $('Gerar Protocolo').first().json;\nconst b = src.body;\nconst proto = src.protocolo;\nconst modelo = $json.Modelo || null;\n\n// sem acento na chave de busca: o valor vem como \"Parque Dois Irmãos\"\nconst SEDES = [\n  { chave: 'MESSEJANA', endereco: 'Av. Gurgel do Amaral, 1037 - Messejana, Fortaleza - CE, 60810-360' },\n  { chave: 'DOIS IRM', endereco: 'R. A (Lot. Parque Montenegro 1), 981 - Parque Dois Irmãos, Fortaleza - CE, 60540-256' },\n];\n\nconst sedeNome = String(b.sede == null ? '' : b.sede).trim();\nconst ehSede = sedeNome.length > 0;\nlet sedeEndereco = '';\nif (ehSede) {\n  const alvo = sedeNome.toUpperCase();\n  for (const s of SEDES) {\n    if (alvo.indexOf(s.chave) >= 0) { sedeEndereco = s.endereco; break; }\n  }\n}\n\nlet agenda = '';\nif (b.data_formatada && b.turno) {\n  agenda = `📅 Data: ${b.data_formatada} - Turno: ${b.turno}`;\n}\n\nconst placaTexto = b.placa || 'Não informado';\nconst placaLinha = modelo ? `🚗 Placa: ${placaTexto} (${modelo})` : `🚗 Placa: ${placaTexto}`;\n\nconst linhas = [];\nlinhas.push(`Olá, ${b.nome}! ✅`);\nlinhas.push('Seu agendamento de *instalação* foi confirmado com sucesso pelo nosso portal.');\nlinhas.push('');\nlinhas.push(`📋 Protocolo: ${proto}`);\nlinhas.push(placaLinha);\n\nif (ehSede) {\n  linhas.push(`🏢 Sede: ${sedeNome}`);\n  if (sedeEndereco) linhas.push(`📍 ${sedeEndereco}`);\n} else if (b.endereco) {\n  linhas.push(`📍 Endereço: ${b.endereco.rua}, ${b.endereco.numero} - ${b.endereco.bairro}` + (b.endereco.referencia ? ` (${b.endereco.referencia})` : ''));\n}\nif (agenda) linhas.push(agenda);\n\nlinhas.push('');\n// atendimento na sede: o cliente é que vai até nós, não faz sentido falar em visita do técnico\nif (ehSede) {\n  linhas.push('Compareça em dia útil, dentro do horário comercial, com um documento com foto (CPF ou RG), e dirija-se à recepção.');\n} else {\n  linhas.push('Nosso técnico fará contato antes de ir ao local.');\n}\nlinhas.push('Guarde o número de protocolo.');\nlinhas.push('');\nlinhas.push('Qualquer dúvida, estamos à disposição.');\nlinhas.push('Empresa Exemplo');\n\nconst MensagemFinal = linhas.join('\\n');\nconst numeroLimpo = $('Mensagem').first().json.Numero_Limpo;\nreturn items.map(i => ({ json: { ...i.json, Numero_Limpo: numeroLimpo, MensagemFinal } }));"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          288,
+          -224
+        ],
+        "id": "montar-mensagem",
+        "name": "Montar Mensagem"
+      },
+      {
+        "parameters": {
+          "jsCode": "const src = $('Gerar Protocolo').first().json;\nconst b = src.body;\nconst proto = src.protocolo;\nconst modelo = $json.Modelo || null;\nconst local = b.endereco ? `📍 Endereço: ${b.endereco.rua}, ${b.endereco.numero} - ${b.endereco.bairro}` + (b.endereco.referencia ? ` (${b.endereco.referencia})` : '') : '';\nconst agenda = (b.data_formatada && b.turno) ? `📅 Data: ${b.data_formatada} - Turno: ${b.turno}` : '';\nconst placaTexto = b.placa || 'Não informado';\nconst placaLinha = modelo ? `🚗 Placa: ${placaTexto} (${modelo})` : `🚗 Placa: ${placaTexto}`;\nconst linhas = [];\nlinhas.push(`Olá, ${b.nome}! ✅`);\nlinhas.push('Seu agendamento de *retirada* foi confirmado com sucesso pelo nosso portal.');\nlinhas.push('');\nlinhas.push(`📋 Protocolo: ${proto}`);\nlinhas.push(placaLinha);\nif (local) linhas.push(local);\nif (agenda) linhas.push(agenda);\nlinhas.push('');\nlinhas.push('Nosso técnico fará contato antes de ir ao local.');\nlinhas.push('Guarde o número de protocolo.');\nlinhas.push('');\nlinhas.push('Qualquer dúvida, estamos à disposição.');\nlinhas.push('Empresa Exemplo');\nconst MensagemFinal = linhas.join('\\n');\nconst numeroLimpo = $('Mensagem1').first().json.Numero_Limpo;\nreturn items.map(i => ({ json: { ...i.json, Numero_Limpo: numeroLimpo, MensagemFinal } }));\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          288,
+          -32
+        ],
+        "id": "montar-mensagem1",
+        "name": "Montar Mensagem1"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": false,
+              "leftValue": "",
+              "typeValidation": "loose"
+            },
+            "conditions": [
+              {
+                "id": "isGestao1",
+                "leftValue": "={{ $json.origem }}",
+                "rightValue": "SistemaGestao",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2,
+        "position": [
+          736,
+          352
+        ],
+        "id": "e-cliente-SistemaGestao-if",
+        "name": "E Cliente SistemaGestao?"
+      },
+      {
+        "parameters": {
+          "documentId": {
+            "__rl": true,
+            "value": "1uS7B8huS1-WovSdHRQb7HbWTkaoywYB1C8bBXP-qE0M",
+            "mode": "list",
+            "cachedResultName": "SERVICOS",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1uS7B8huS1-WovSdHRQb7HbWTkaoywYB1C8bBXP-qE0M/edit?usp=drivesdk"
+          },
+          "sheetName": {
+            "__rl": true,
+            "value": 2011226510,
+            "mode": "list",
+            "cachedResultName": "INSTALACOES 2.0",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1uS7B8huS1-WovSdHRQb7HbWTkaoywYB1C8bBXP-qE0M/edit#gid=2011226510"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.googleSheets",
+        "typeVersion": 4.5,
+        "position": [
+          960,
+          336
+        ],
+        "id": "ler-instalacoes-buscar",
+        "name": "Ler Instalacoes (buscar CPF)",
+        "credentials": {
+          "googleSheetsOAuth2Api": {
+            "id": "Q0rDGbFqayibPO3n",
+            "name": "TI.COORD"
+          }
+        },
+        "continueOnFail": true,
+        "onError": "continueRegularOutput",
+        "retryOnFail": true,
+        "maxTries": 4,
+        "waitBetweenTries": 3000
+      },
+      {
+        "parameters": {
+          "jsCode": "const decidido = $('Decidir Fonte (prefere SQL)').first().json;\nconst body = $('Gerar Protocolo').first().json.body;\n\nconst soDigitos = (v) => String(v == null ? '' : v).replace(/[^0-9]/g, '');\nconst normPlaca = (v) => String(v == null ? '' : v).toUpperCase().replace(/[^A-Z0-9]/g, '');\n\nconst cpfAlvo = soDigitos(decidido.documento || body.documento);\nif (!cpfAlvo) return [{ json: { found: false, motivo: 'sem_cpf' } }];\n\nconst placaAlvo = normPlaca(body.placa);\nconst rows = items.map(i => i.json);\nconst candidatos = rows.filter(r => soDigitos(r.CPF) === cpfAlvo);\n\nif (candidatos.length === 0) return [{ json: { found: false, motivo: 'cpf_nao_encontrado' } }];\n\n// 1) CPF + placa: único jeito de saber QUAL veículo quando o associado tem várias linhas (adição)\nif (placaAlvo) {\n  const porPlaca = candidatos.find(r => normPlaca(r.PLACA) === placaAlvo);\n  if (porPlaca) {\n    return [{ json: { found: true, row_number: porPlaca.row_number, criterio: 'cpf_placa' } }];\n  }\n}\n\n// 2) linha única: não existe ambiguidade possível, então marca mesmo se a placa não bater\n//    (cobre erro de digitação do cliente no formulário e linha antiga sem placa)\nif (candidatos.length === 1) {\n  return [{ json: { found: true, row_number: candidatos[0].row_number, criterio: 'cpf_unico' } }];\n}\n\n// 3) várias linhas e nenhuma placa batendo: não dá pra saber qual veículo é.\n//    Marcar a linha errada vincularia o veículo à OS errada, então prefere não marcar.\nreturn [{ json: { found: false, motivo: 'ambiguo', candidatos: candidatos.length } }];"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          1184,
+          336
+        ],
+        "id": "achar-linha-cliente",
+        "name": "Achar Linha do Cliente"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": false,
+              "leftValue": "",
+              "typeValidation": "loose"
+            },
+            "conditions": [
+              {
+                "id": "found1",
+                "leftValue": "={{ $json.found }}",
+                "rightValue": true,
+                "operator": {
+                  "type": "boolean",
+                  "operation": "equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2,
+        "position": [
+          1408,
+          336
+        ],
+        "id": "encontrado-na-planilha-if",
+        "name": "Encontrado na Planilha?"
+      },
+      {
+        "parameters": {
+          "operation": "update",
+          "documentId": {
+            "__rl": true,
+            "value": "1uS7B8huS1-WovSdHRQb7HbWTkaoywYB1C8bBXP-qE0M",
+            "mode": "list",
+            "cachedResultName": "SERVICOS",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1uS7B8huS1-WovSdHRQb7HbWTkaoywYB1C8bBXP-qE0M/edit?usp=drivesdk"
+          },
+          "sheetName": {
+            "__rl": true,
+            "value": 2011226510,
+            "mode": "list",
+            "cachedResultName": "INSTALACOES 2.0",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1uS7B8huS1-WovSdHRQb7HbWTkaoywYB1C8bBXP-qE0M/edit#gid=2011226510"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "row_number": "={{ $json.row_number }}",
+              "STATUS": "AGENDADO"
+            },
+            "matchingColumns": [
+              "row_number"
+            ],
+            "schema": []
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.googleSheets",
+        "typeVersion": 4.5,
+        "position": [
+          1632,
+          320
+        ],
+        "id": "atualizar-status-instalacoes",
+        "name": "Atualizar Status para Agendado",
+        "credentials": {
+          "googleSheetsOAuth2Api": {
+            "id": "Q0rDGbFqayibPO3n",
+            "name": "TI.COORD"
+          }
+        },
+        "continueOnFail": true,
+        "onError": "continueRegularOutput",
+        "retryOnFail": true,
+        "maxTries": 4,
+        "waitBetweenTries": 3000
+      },
+      {
+        "parameters": {
+          "operation": "executeQuery",
+          "query": "SELECT TOP 1 Modelo FROM GRVeículos WHERE Placa = '{{ $json.Placa.toUpperCase().replace(/[^A-Z0-9]/g,\"\") }}'",
+          "options": {}
+        },
+        "id": "3f3f0c99-172d-4210-b0d6-11cb21275ee0",
+        "name": "Buscar Modelo Veiculo",
+        "type": "n8n-nodes-base.microsoftSql",
+        "typeVersion": 1,
+        "position": [
+          176,
+          -224
+        ],
+        "credentials": {
+          "microsoftSql": {
+            "id": "L9s5H74bQMTWfPdN",
+            "name": "SQL Service"
+          }
+        },
+        "alwaysOutputData": true,
+        "continueOnFail": true
+      },
+      {
+        "parameters": {
+          "operation": "executeQuery",
+          "query": "SELECT TOP 1 Modelo FROM GRVeículos WHERE Placa = '{{ $json.Placa.toUpperCase().replace(/[^A-Z0-9]/g,\"\") }}'",
+          "options": {}
+        },
+        "id": "7b9bb511-a38a-465c-b7e6-f2d9718f3d68",
+        "name": "Buscar Modelo Veiculo1",
+        "type": "n8n-nodes-base.microsoftSql",
+        "typeVersion": 1,
+        "position": [
+          176,
+          -32
+        ],
+        "credentials": {
+          "microsoftSql": {
+            "id": "L9s5H74bQMTWfPdN",
+            "name": "SQL Service"
+          }
+        },
+        "alwaysOutputData": true,
+        "continueOnFail": true
+      },
+      {
+        "parameters": {
+          "jsCode": "const body = $('Gerar Protocolo').first().json.body;\nconst protocolo = $('Gerar Protocolo').first().json.protocolo;\nconst achar = $json;\nconst fonte = $('Decidir Fonte (prefere SQL)').first().json;\n\nconst now = new Date();\nconst dataStr = String(now.getDate()).padStart(2,'0') + '/' + String(now.getMonth()+1).padStart(2,'0') + '/' + now.getFullYear();\n\nfunction soDigitos(v) { return String(v == null ? '' : v).replace(/[^0-9]/g, ''); }\nfunction formatarCPF(v) {\n  const d = soDigitos(v);\n  if (d.length === 11) return d.slice(0,3) + '.' + d.slice(3,6) + '.' + d.slice(6,9) + '-' + d.slice(9);\n  if (d.length === 14) return d.slice(0,2) + '.' + d.slice(2,5) + '.' + d.slice(5,8) + '/' + d.slice(8,12) + '-' + d.slice(12);\n  return String(v == null ? '' : v).trim();\n}\n\nlet motivoTexto;\nif (achar.motivo === 'sem_cpf') {\n  motivoTexto = 'Sem CPF informado no agendamento.';\n} else {\n  const sistema = fonte && fonte.origem === 'sql_server' ? 'Empresa Exemplo' : 'RESOLVE';\n  const clienteAchado = !!(fonte && fonte.encontrado);\n\n  if (clienteAchado) {\n    motivoTexto = 'Veiculo nao encontrado no cadastro do cliente na ' + sistema + ' (codigo ' + fonte.cod_cliente + ') - confirme a placa.';\n  } else {\n    motivoTexto = 'Cliente nao encontrado nem na Empresa Exemplo nem na Marca C - provavel cadastro novo.';\n  }\n\n  if (achar.motivo === 'ambiguo') {\n    motivoTexto += ' CPF tem mais de um veiculo na planilha de instalacoes e nenhum bateu com a placa informada.';\n  }\n}\n\nconst agenda = (body.data_formatada && body.turno) ? (body.data_formatada + ' - ' + body.turno) : 'sem data/turno definida';\n\nreturn [{ json: {\n  DATA: dataStr,\n  ASSOCIADO: String(body.nome == null ? '' : body.nome).trim(),\n  CPF: formatarCPF(body.documento),\n  PLACA: String(body.placa == null ? '' : body.placa).toUpperCase().trim(),\n  STATUS: 'ANÁLISE PENDENTE',\n  ASSINATURA: now.toISOString(),\n  AGENDAMENTO: 'ANÁLISE PENDENTE: ' + motivoTexto + ' Protocolo ' + protocolo + '. Agenda: ' + agenda + '.',\n  PLANO: '',\n  VALOR_ADESAO: '',\n  TELEFONE: String(body.whatsapp == null ? '' : body.whatsapp).trim(),\n} }];\n"
+        },
+        "id": "montar-linha-pendente-01",
+        "name": "Montar Linha Pendente",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          1528,
+          496
+        ]
+      },
+      {
+        "parameters": {
+          "operation": "append",
+          "documentId": {
+            "__rl": true,
+            "value": "1uS7B8huS1-WovSdHRQb7HbWTkaoywYB1C8bBXP-qE0M",
+            "mode": "list",
+            "cachedResultName": "SERVICOS",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1uS7B8huS1-WovSdHRQb7HbWTkaoywYB1C8bBXP-qE0M/edit?usp=drivesdk"
+          },
+          "sheetName": {
+            "__rl": true,
+            "value": 2011226510,
+            "mode": "list",
+            "cachedResultName": "INSTALACOES 2.0",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1uS7B8huS1-WovSdHRQb7HbWTkaoywYB1C8bBXP-qE0M/edit#gid=2011226510"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "DATA": "={{ $json.DATA }}",
+              "ASSOCIADO": "={{ $json.ASSOCIADO }}",
+              "CPF": "={{ $json.CPF }}",
+              "PLACA": "={{ $json.PLACA }}",
+              "STATUS": "={{ $json.STATUS }}",
+              "ASSINATURA": "={{ $json.ASSINATURA }}",
+              "AGENDAMENTO": "={{ $json.AGENDAMENTO }}",
+              "PLANO": "={{ $json.PLANO }}",
+              "VALOR_ADESAO": "={{ $json.VALOR_ADESAO }}",
+              "TELEFONE": "={{ $json.TELEFONE }}"
+            },
+            "matchingColumns": [],
+            "schema": []
+          },
+          "options": {}
+        },
+        "id": "sinalizar-vinculo-pendente-01",
+        "name": "Sinalizar Vinculo Pendente",
+        "type": "n8n-nodes-base.googleSheets",
+        "typeVersion": 4.5,
+        "position": [
+          1748,
+          496
+        ],
+        "credentials": {
+          "googleSheetsOAuth2Api": {
+            "id": "Q0rDGbFqayibPO3n",
+            "name": "TI.COORD"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": false,
+              "leftValue": "",
+              "typeValidation": "loose"
+            },
+            "conditions": [
+              {
+                "id": "legado-confirma-1",
+                "leftValue": "={{ !!($('Decidir Fonte (prefere SQL)').first().json.encontrado && $('Decidir Fonte (prefere SQL)').first().json.veiculo_placa) }}",
+                "rightValue": true,
+                "operator": {
+                  "type": "boolean",
+                  "operation": "equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "id": "legado-confirma-vinculo-if",
+        "name": "Legado Confirma Vinculo?",
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2,
+        "position": [
+          1408,
+          336
+        ]
+      },
+      {
+        "parameters": {
+          "jsCode": "const body = $('Gerar Protocolo').first().json.body;\nconst protocolo = $('Gerar Protocolo').first().json.protocolo;\nconst fonte = $('Decidir Fonte (prefere SQL)').first().json;\n\nconst now = new Date();\nconst dataStr = String(now.getDate()).padStart(2,'0') + '/' + String(now.getMonth()+1).padStart(2,'0') + '/' + now.getFullYear();\n\nfunction soDigitos(v) { return String(v == null ? '' : v).replace(/[^0-9]/g, ''); }\nfunction formatarCPF(v) {\n  const d = soDigitos(v);\n  if (d.length === 11) return d.slice(0,3) + '.' + d.slice(3,6) + '.' + d.slice(6,9) + '-' + d.slice(9);\n  if (d.length === 14) return d.slice(0,2) + '.' + d.slice(2,5) + '.' + d.slice(5,8) + '/' + d.slice(8,12) + '-' + d.slice(12);\n  return String(v == null ? '' : v).trim();\n}\n\nconst dataAgendamento = body.data_formatada || dataStr;\nconst dataCurta = dataAgendamento.slice(0,5);\nconst turnoTexto = body.turno ? String(body.turno).toUpperCase() : '';\n\nconst nome = fonte.nome || body.nome || '';\nconst documento = fonte.documento || body.documento;\nconst placa = fonte.veiculo_placa || body.placa || '';\nconst telefone = fonte.telefone || body.whatsapp || '';\n\nconst agendamentoTexto = 'AGENDAMENTO ' + dataCurta + ' - PROTOCOLO ' + protocolo + ' - PORTAL' + (turnoTexto ? ' - ' + turnoTexto : '');\n\nreturn [{ json: {\n  DATA: dataStr,\n  ASSOCIADO: String(nome).trim().toUpperCase(),\n  CPF: formatarCPF(documento),\n  PLACA: String(placa).toUpperCase().trim(),\n  STATUS: 'AGENDADO',\n  ASSINATURA: now.toISOString(),\n  AGENDAMENTO: agendamentoTexto,\n  PLANO: fonte.plano || '',\n  VALOR_ADESAO: fonte.valor_adesao || '',\n  TELEFONE: String(telefone).trim(),\n} }];\n"
+        },
+        "id": "montar-linha-confirmada-01",
+        "name": "Montar Linha Confirmada Legado",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          1588,
+          336
+        ]
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": false,
+              "leftValue": "",
+              "typeValidation": "loose"
+            },
+            "conditions": [
+              {
+                "id": "e-instalacao-1",
+                "leftValue": "={{ $('Gerar Protocolo').first().json.body.tipo_agendamento }}",
+                "rightValue": "instalacao",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "id": "e-instalacao-if-01",
+        "name": "É Instalação?",
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2,
+        "position": [
+          780,
+          336
+        ]
+      }
+    ],
+    "connections": {
+      "Webhook": {
+        "main": [
+          [
+            {
+              "node": "Gerar Protocolo",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "HTTP Request1": {
+        "main": [
+          [
+            {
+              "node": "Do Nothing",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Dispáro Agendamento UAZAP1": {
+        "main": [
+          [],
+          [
+            {
+              "node": "HTTP Request1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Switch": {
+        "main": [
+          [
+            {
+              "node": "Mensagem",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Mensagem1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Dispáro Agendamento UAZAP": {
+        "main": [
+          [
+            {
+              "node": "Do Nothing1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "HTTP Request": {
+        "main": [
+          [
+            {
+              "node": "Do Nothing1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Mensagem": {
+        "main": [
+          [
+            {
+              "node": "Buscar Modelo Veiculo",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Mensagem1": {
+        "main": [
+          [
+            {
+              "node": "Buscar Modelo Veiculo1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Consultar Cliente SQL Server": {
+        "main": [
+          [
+            {
+              "node": "Tag SQL",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Tag SQL": {
+        "main": [
+          [
+            {
+              "node": "Merge Consultas",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Consultar Cliente SistemaGestao": {
+        "main": [
+          [
+            {
+              "node": "Tag SistemaGestao",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Tag SistemaGestao": {
+        "main": [
+          [
+            {
+              "node": "Merge Consultas",
+              "type": "main",
+              "index": 1
+            }
+          ]
+        ]
+      },
+      "Merge Consultas": {
+        "main": [
+          [
+            {
+              "node": "Decidir Fonte (prefere SQL)",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Decidir Fonte (prefere SQL)": {
+        "main": [
+          [
+            {
+              "node": "Respond to Webhook",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "É Instalação?",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Gerar Protocolo": {
+        "main": [
+          [
+            {
+              "node": "Switch",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Consultar Cliente SQL Server",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Consultar Cliente SistemaGestao",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Montar Mensagem": {
+        "main": [
+          [
+            {
+              "node": "Dispáro Agendamento UAZAP",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Montar Mensagem1": {
+        "main": [
+          [
+            {
+              "node": "Dispáro Agendamento UAZAP1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "E Cliente SistemaGestao?": {
+        "main": [
+          [
+            {
+              "node": "Ler Instalacoes (buscar CPF)",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          []
+        ]
+      },
+      "Ler Instalacoes (buscar CPF)": {
+        "main": [
+          [
+            {
+              "node": "Achar Linha do Cliente",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Achar Linha do Cliente": {
+        "main": [
+          [
+            {
+              "node": "Encontrado na Planilha?",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Encontrado na Planilha?": {
+        "main": [
+          [
+            {
+              "node": "Atualizar Status para Agendado",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Legado Confirma Vinculo?",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Buscar Modelo Veiculo": {
+        "main": [
+          [
+            {
+              "node": "Montar Mensagem",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Buscar Modelo Veiculo1": {
+        "main": [
+          [
+            {
+              "node": "Montar Mensagem1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Montar Linha Pendente": {
+        "main": [
+          [
+            {
+              "node": "Sinalizar Vinculo Pendente",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Legado Confirma Vinculo?": {
+        "main": [
+          [
+            {
+              "node": "Montar Linha Confirmada Legado",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Montar Linha Pendente",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Montar Linha Confirmada Legado": {
+        "main": [
+          [
+            {
+              "node": "Sinalizar Vinculo Pendente",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "É Instalação?": {
+        "main": [
+          [
+            {
+              "node": "Ler Instalacoes (buscar CPF)",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Do Nothing",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Setor de TI",
+    "name": null,
+    "description": null,
+    "autosaved": false,
+    "workflowPublishHistory": [
+      {
+        "createdAt": "2026-10-28T15:27:58.753Z",
+        "id": 17746,
+        "workflowId": "n7UmevheoHcPUngxMPzVS",
+        "versionId": "81d748ca-157e-4bd3-b79a-fb7af1cda074",
+        "event": "deactivated",
+        "userId": "be49a18c-c103-4326-8421-d10a7b7c9f1d"
+      },
+      {
+        "createdAt": "2026-10-28T15:27:58.775Z",
+        "id": 17747,
+        "workflowId": "n7UmevheoHcPUngxMPzVS",
+        "versionId": "81d748ca-157e-4bd3-b79a-fb7af1cda074",
+        "event": "activated",
+        "userId": "be49a18c-c103-4326-8421-d10a7b7c9f1d"
+      },
+      {
+        "createdAt": "2026-10-28T15:26:48.218Z",
+        "id": 17744,
+        "workflowId": "n7UmevheoHcPUngxMPzVS",
+        "versionId": "81d748ca-157e-4bd3-b79a-fb7af1cda074",
+        "event": "deactivated",
+        "userId": "be49a18c-c103-4326-8421-d10a7b7c9f1d"
+      },
+      {
+        "createdAt": "2026-10-28T15:26:48.234Z",
+        "id": 17745,
+        "workflowId": "n7UmevheoHcPUngxMPzVS",
+        "versionId": "81d748ca-157e-4bd3-b79a-fb7af1cda074",
+        "event": "activated",
+        "userId": "be49a18c-c103-4326-8421-d10a7b7c9f1d"
+      },
+      {
+        "createdAt": "2026-10-28T15:29:08.003Z",
+        "id": 17748,
+        "workflowId": "n7UmevheoHcPUngxMPzVS",
+        "versionId": "81d748ca-157e-4bd3-b79a-fb7af1cda074",
+        "event": "deactivated",
+        "userId": "be49a18c-c103-4326-8421-d10a7b7c9f1d"
+      },
+      {
+        "createdAt": "2026-10-28T15:29:08.022Z",
+        "id": 17749,
+        "workflowId": "n7UmevheoHcPUngxMPzVS",
+        "versionId": "81d748ca-157e-4bd3-b79a-fb7af1cda074",
+        "event": "activated",
+        "userId": "be49a18c-c103-4326-8421-d10a7b7c9f1d"
+      }
+    ]
+  }
+}

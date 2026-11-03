@@ -44,6 +44,55 @@ flowchart TD
     L -->|não| LP[Linha pendente<br/>para revisão humana]
 ```
 
+## O back-end é híbrido, e é aí que mora a complexidade
+
+Este fluxo não é "a automação por trás de um site". Ele é **parte de um back-end
+dividido**, e entender isso é entender o problema real:
+
+```
+       ┌──────────────────────────────┐
+       │   front-end escrito à mão    │
+       │  (formulário de agendamento) │
+       └───────┬──────────────┬───────┘
+               │              │
+        grava direto     dispara webhook
+               │              │
+               ▼              ▼
+     ┌──────────────┐   ┌──────────────────┐
+     │   BaaS       │   │   n8n            │
+     │  (banco do   │   │  (este fluxo)    │
+     │   formulário)│   │                  │
+     └──────────────┘   └────────┬─────────┘
+                                 │
+                   ┌─────────────┼─────────────┐
+                   ▼             ▼             ▼
+             ERP legado    Sistema de    Planilha
+             SQL Server     gestão       operacional
+```
+
+**Duas coisas respondem como back-end ao mesmo tempo.** O front-end grava o
+agendamento direto no banco do BaaS — é o caminho rápido, e é o que o cliente
+vê confirmado na tela. Em paralelo, dispara um webhook para o n8n, que faz o
+trabalho pesado: cruzar o cliente nas bases de origem, decidir a fonte, gerar
+protocolo, avisar por WhatsApp e atualizar a planilha que a operação usa.
+
+**O custo disso é que os dois lados não compartilham estado.** O BaaS não sabe
+se o n8n conseguiu casar o cliente; o n8n não escreve de volta no BaaS. Quando o
+cruzamento falha, o cliente recebe a confirmação normalmente — mas a operação
+não recebe o caso linkado. O sintoma é o pior possível: falha silenciosa, visível
+só para quem olha a planilha.
+
+É exatamente por isso que o nó de **vínculo pendente** existe, descrito abaixo.
+Ele é a emenda que torna a falha visível, já que as duas metades do back-end não
+conversam.
+
+**Por que ficou assim.** O formulário precisava responder rápido e funcionar
+mesmo com o n8n fora do ar; a lógica de cruzamento precisava de acesso ao ERP
+legado, que o front não tem nem deve ter. Separar resolveu as duas coisas e
+criou a terceira. A alternativa honesta — n8n como único back-end, com o front
+só consumindo — custaria latência no formulário e um ponto único de falha na
+hora da venda.
+
 ## Decisões que sustentam o fluxo
 
 **Consulta as duas fontes em paralelo, não em cascata.** Perguntar primeiro a
